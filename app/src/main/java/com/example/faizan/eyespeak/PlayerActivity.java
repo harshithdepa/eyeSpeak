@@ -11,3 +11,5 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
     }
 }
+    //Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+   // startActivity(intent);
