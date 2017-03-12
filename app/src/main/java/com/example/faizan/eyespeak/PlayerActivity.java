@@ -85,5 +85,3 @@ public class PlayerActivity extends AppCompatActivity {
         updateListView();
     }
 }
-    //Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-   // startActivity(intent);

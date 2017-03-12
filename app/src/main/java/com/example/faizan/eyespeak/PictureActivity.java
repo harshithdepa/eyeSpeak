@@ -1,6 +1,7 @@
 package com.example.faizan.eyespeak;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
@@ -57,6 +59,7 @@ public class PictureActivity extends AppCompatActivity {
     private static final int GALLERY_IMAGE_REQUEST = 1;
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
     public static final int CAMERA_IMAGE_REQUEST = 3;
+    private final static int REQ_CODE_SPEECH_INPUT = 999;
 
     ImageView imageView;
     TextView textView;
@@ -132,12 +135,25 @@ public class PictureActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        String userInput;
 
         if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             uploadImage(data.getData());
         } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
             Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
             uploadImage(photoUri);
+        }
+
+        if(requestCode == REQ_CODE_SPEECH_INPUT) {
+            Log.d("HERE", "requestCode");
+            if (resultCode == RESULT_OK && null != data) {
+                Log.d("HERE", "resultCode");
+                ArrayList<String> result = data
+                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                userInput = result.get(0);
+                compareUserAndImage(userInput, textView.getText().toString());
+            }
+
         }
     }
 
@@ -279,6 +295,7 @@ public class PictureActivity extends AppCompatActivity {
                 } catch (Exception e){
                     Log.d("Here", e.getMessage());
                 }
+                promptSpeechInput();
             }
         }.execute();
     }
@@ -325,6 +342,27 @@ public class PictureActivity extends AppCompatActivity {
         }
 
         return message;
+    }
+
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Give it a shot!");
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(), "Sorry! Your device doesn\'t support speech input", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void compareUserAndImage(String userAnswer, String imageAnswer){
+        if(userAnswer.equals(imageAnswer)){
+            finish();
+        } else {
+            promptSpeechInput();
+        }
     }
 
 }
