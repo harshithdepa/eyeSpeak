@@ -4,23 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.faizan.eyespeak.PlayerActivity"
-    tools:layout_editor_absoluteY="0dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:context="com.example.faizan.eyespeak.PlayerActivity">
 
     <ListView
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="400dp"
-        android:layout_marginTop="73dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/oldPicsList" />
 
-    <Button
-        android:id="@+id/button"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take Picture"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="22dp" />
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <ProgressBar
+        android:id="@+id/levelBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/oldPicsList"
+        android:layout_marginBottom="31dp"
+        android:layout_toStartOf="@+id/camera" />
 </RelativeLayout>
