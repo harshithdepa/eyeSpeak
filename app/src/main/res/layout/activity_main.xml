@@ -21,9 +21,10 @@
         android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/play_button"
-        android:layout_marginBottom="87dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />v
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="87dp"
+        android:background="#fcb400"
+        android:text="@string/play_button" />v
 
 </RelativeLayout>
